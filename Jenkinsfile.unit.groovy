@@ -17,6 +17,7 @@ pipeline {
         }
         stage('Api test') {
             steps {
+                sh 'docker stop apiserver'                
                 sh 'docker rm apiserver'
                 sh 'make test-api'
                 archiveArtifacts artifacts: 'results/*.xml'
