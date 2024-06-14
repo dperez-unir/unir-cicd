@@ -17,17 +17,23 @@ pipeline {
         }
         stage('Api test') {
             steps {
-                sh 'docker stop apiserver'                
-                sh 'docker rm apiserver'
+                sh 'docker stop apiserver || true'                
+                sh 'docker rm apiserver || true'    
                 sh 'make test-api'
                 archiveArtifacts artifacts: 'results/*.xml'
+                sh 'docker stop apiserver || true'                
+                sh 'docker rm apiserver || true'
             }
         }
         stage('E2e test') {
             steps {
+                sh 'docker stop apiserver || true'                
+                sh 'docker rm apiserver || true'                
                 sh 'make server'
                 sh 'make test-e2e'                
                 archiveArtifacts artifacts: 'results/*.xml'
+                sh 'docker stop apiserver || true'                
+                sh 'docker rm apiserver || true'                
             }
         }        
     }
