@@ -29,7 +29,6 @@ pipeline {
             steps {
                 sh 'docker stop apiserver || true'                
                 sh 'docker rm apiserver || true'                
-                sh 'make server'
                 sh 'make test-e2e'                
                 archiveArtifacts artifacts: 'results/*.xml'
                 sh 'docker stop apiserver || true'                
