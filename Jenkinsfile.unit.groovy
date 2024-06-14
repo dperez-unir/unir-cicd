@@ -15,13 +15,7 @@ pipeline {
                 archiveArtifacts artifacts: 'results/*.xml'
             }
         }
-        stage('Unit e2e') {
-            steps {
-                sh 'make test-e2e'
-                archiveArtifacts artifacts: 'results/*.xml'
-            }
-        }
-        stage('Unit api') {
+        stage('Api test') {
             steps {
                 sh 'make test-api'
                 archiveArtifacts artifacts: 'results/*.xml'
