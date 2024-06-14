@@ -1,3 +1,4 @@
+
 .PHONY: all $(MAKECMDGOALS)
 
 build:
@@ -6,7 +7,7 @@ build:
 
 server:
 	docker network create calc-server-net || true
-	docker run --rm --name apiserver --network-alias apiserver --env PYTHONPATH=/opt/calc --env FLASK_APP=app/api.py -p 5000:5000 -w /opt/calc calculator-app:latest flask run --host=0.0.0.0
+        docker run --rm --network calc-server-net --name apiserver --env PYTHONPATH=/opt/calc --env FLASK_APP=app/api.py -p 5000:5000 -w /opt/calc calculator-app:latest flask run --host=0.0.0.0
 	docker network rm calc-server-net
 
 test-unit:
