@@ -3,6 +3,14 @@ pipeline {
         label 'docker'
     }
     stages {
+        stage('Clear Previous results') {
+            steps {
+                sh 'mkdir -p restults_old'
+                sh 'mv results/* results_old/'
+                sh 'rm -rf results_old'
+            }
+        }
+        
         stage('Build') {
             steps {
                 echo 'Building stage!'
