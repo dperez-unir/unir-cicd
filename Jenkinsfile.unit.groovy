@@ -13,6 +13,7 @@ pipeline {
             steps {
                 sh 'make test-unit'
                 archiveArtifacts artifacts: 'results/*.xml'
+                archiveArtifacts artifacts: 'results/*.html'                
             }
         }
         stage('Api test') {
@@ -21,6 +22,7 @@ pipeline {
                 sh 'docker rm apiserver || true'    
                 sh 'make test-api'
                 archiveArtifacts artifacts: 'results/*.xml'
+                archiveArtifacts artifacts: 'results/*.htmo'                
             }
         }
         stage('E2e test') {
@@ -29,6 +31,7 @@ pipeline {
                 sh 'docker rm apiserver || true'                
                 sh 'make test-e2e'                
                 archiveArtifacts artifacts: 'results/*.xml'
+                archiveArtifacts artifacts: 'results/*.html'                
             }
         } 
     }
