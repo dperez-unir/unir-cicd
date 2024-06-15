@@ -40,10 +40,10 @@ pipeline {
         always {
             junit 'results/*_result.xml'
             emailext (
-                subject: "Build ${currentBuild.fullDisplayName}",
-                body: """<p>Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}:</p>
-                         <p>Check console output at <a href="${env.BUILD_URL}">${env.BUILD_URL}</a> to view the results.</p>""",
-                to: 'david.perez.rod@gmail.com'            )
+                subject: "Envío de prueba",
+                body: "lo típico, 'recuerdo de constantinopla",
+                to: 'david.perez.rod@gmail.com'
+            )
         }
     }
 }
