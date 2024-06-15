@@ -42,6 +42,7 @@ pipeline {
         }            
         failure {
                 junit 'results/*_result.xml'            
+                junit 'results/*_result.xml'
                 emailext (
                     subject: "Build ${currentBuild.fullDisplayName}",
                     body: """\
