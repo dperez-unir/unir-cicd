@@ -20,6 +20,8 @@ pipeline {
             steps {
                 echo 'Building stage!'
                 sh 'make build'
+                archiveArtifacts artifacts: 'results/html/*', fingerprint: true
+                archiveArtifacts artifacts: 'results/coverage/*', fingerprint: true
             }
         }
         stage('Unit tests') {
@@ -32,6 +34,8 @@ pipeline {
                 sh 'docker stop apiserver || true'                
                 sh 'docker rm apiserver || true'    
                 sh 'make test-api'
+                archiveArtifacts artifacts: 'results/html/*', fingerprint: true
+                archiveArtifacts artifacts: 'results/coverage/*', fingerprint: true                
             }
         }
         stage('E2e test') {
@@ -39,15 +43,10 @@ pipeline {
                 sh 'docker stop apiserver || true'                
                 sh 'docker rm apiserver || true'                
                 sh 'make test-e2e'                
+                archiveArtifacts artifacts: 'results/html/*', fingerprint: true
+                archiveArtifacts artifacts: 'results/coverage/*', fingerprint: true                
             }
         } 
-        stage('Archive artifacts') {
-            steps {
-                // Archivar los artefactos en sus respectivas subcarpetas
-                archiveArtifacts artifacts: 'results/html/*', fingerprint: true
-                archiveArtifacts artifacts: 'results/coverage/*', fingerprint: true
-            }
-        }        
     }
     post {
         always {
