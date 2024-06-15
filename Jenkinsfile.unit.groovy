@@ -13,7 +13,6 @@ pipeline {
                 '''
             }
         }
-
         stage('Build') {
             steps {
                 echo 'Building stage!'
@@ -23,11 +22,6 @@ pipeline {
         stage('Unit tests') {
             steps {
              sh 'make test-unit'
-            // Archivar los artefactos en sus respectivas subcarpetas
-            archiveArtifacts artifacts: 'results/html/*.html', fingerprint: true
-            archiveArtifacts artifacts: 'results/coverage/*', fingerprint: true
-            archiveArtifacts artifacts: 'results/videos/*', fingerprint: true
-            archiveArtifacts artifacts: 'results/screenshots/*', fingerprint: true
             }
         }
         stage('Api test') {
@@ -48,6 +42,16 @@ pipeline {
                 archiveArtifacts artifacts: 'results/*.html'  
             }
         } 
+        stage('Archive artifacts') {
+            steps {
+                // Archivar los artefactos en sus respectivas subcarpetas
+                archiveArtifacts artifacts: 'results/html/*.html', fingerprint: true
+                archiveArtifacts artifacts: 'results/coverage/*', fingerprint: true
+                archiveArtifacts artifacts: 'results/videos/*', fingerprint: true
+                archiveArtifacts artifacts: 'results/screenshots/*', fingerprint: true
+            }
+        }
+        
     }
     post {
         always {
