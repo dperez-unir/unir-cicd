@@ -13,7 +13,7 @@ server:
 test-unit:
 	docker run --rm --volume `pwd`:/opt/calc --env PYTHONPATH=/opt/calc -w /opt/calc calculator-app:latest pytest --cov --cov-report=xml:results/coverage.xml --cov-report=html:results/coverage --junit-xml=results/coverage/unit_result.xml -m unit || true
 	docker run --rm --volume `pwd`:/opt/calc --env PYTHONPATH=/opt/calc -w /opt/calc calculator-app:latest junit2html results/coverage/unit_result.xml results/unit_result.html || true
-#	docker cp unit-tests:/opt/calc ./ || true
+	docker cp unit-tests:/opt/calc ./ || true
 	docker rm unit-tests || true
 
 test-api:
@@ -61,7 +61,7 @@ test-e2e:
 	docker cp e2e-tests:/cypress/screenshots ./screenshots || true
 
 	# Copiar y convertir el archivo de resultados XML a HTML
-	docker cp e2e-tests:/results/* ./results || true
+	docker cp e2e-tests:/results/ ./results || true
 	docker run --rm --volume `pwd`:/opt/calc --workdir /opt/calc calculator-app:latest junit2html ./cypress_result.xml ./cypress_result.html || true
 
 	# Limpiar contenedores y red
