@@ -12,8 +12,9 @@ pipeline {
         stage('Unit tests') {
             steps {
                 sh 'make test-unit'
+                sh 'mkdir -p results/html'
                 archiveArtifacts artifacts: 'results/*.xml'
-                archiveArtifacts artifacts: 'results/*.html'
+                archiveArtifacts artifacts: 'results/html/*.html'
             }
         }
         stage('Api test') {
