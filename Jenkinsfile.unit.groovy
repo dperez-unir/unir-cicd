@@ -40,8 +40,7 @@ pipeline {
         always {
             junit 'results/*_result.xml'
                 emailext (
-                    from: 'Nombre de Remitente <remitente@ejemplo.com>',
-                    subject: "Envío de prueba",
+                    subject: "Build ${currentBuild.fullDisplayName}",
                     body: """\
                         <html>
                             <head>
