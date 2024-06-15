@@ -12,6 +12,7 @@ pipeline {
         stage('Unit tests') {
             steps {
                 sh 'make test-unit'
+                sh 'ls -R results' // Lista el contenido de la carpeta results                
                 archiveArtifacts artifacts: 'results/*.xml'
                 archiveArtifacts artifacts: 'results/*.html'   
             }
@@ -19,6 +20,7 @@ pipeline {
         stage('Api test') {
             steps {
                 sh 'make test-api'
+                sh 'ls -R results' // Lista el contenido de la carpeta results                
                 archiveArtifacts artifacts: 'results/*.xml'
                 archiveArtifacts artifacts: 'results/*.html' 
             }
@@ -26,6 +28,7 @@ pipeline {
         stage('E2e test') {
             steps {
                 sh 'make test-e2e'                
+                sh 'ls -R results' // Lista el contenido de la carpeta results
                 archiveArtifacts artifacts: 'results/*.xml'
                 archiveArtifacts artifacts: 'results/*.html' 
             }
