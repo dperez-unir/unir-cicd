@@ -3,30 +3,18 @@ pipeline {
         label 'docker'
     }
     stages {
-        stage('Report artifacts') {
-            steps {
-                sh '''
-                    mkdir -p results_old
-                    mv results/* results_old
-                    rm -rf results_old
-                    mkdir -p results/html
-                    mkdir -p results/coverage
-                    mkdir -p results/videos
-                    mkdir -p results/screenshots
-                '''
-            }
-        }
         stage('Build') {
             steps {
                 echo 'Building stage!'
                 sh 'make build'
-                archiveArtifacts artifacts: 'results/html/*', fingerprint: true
-                archiveArtifacts artifacts: 'results/coverage/*', fingerprint: true
             }
         }
         stage('Unit tests') {
             steps {
-             sh 'make test-unit'
+                sh 'make test-unit'
+                archiveArtifacts artifacts: 'results/*.xml'
+                archiveArtifacts artifacts: 'results/*.html'   
+                archiveArtifacts artifacts: 'results/views/*.html' 
             }
         }
         stage('Api test') {
@@ -34,8 +22,8 @@ pipeline {
                 sh 'docker stop apiserver || true'                
                 sh 'docker rm apiserver || true'    
                 sh 'make test-api'
-                archiveArtifacts artifacts: 'results/html/*', fingerprint: true
-                archiveArtifacts artifacts: 'results/coverage/*', fingerprint: true                
+                archiveArtifacts artifacts: 'results/*.xml'
+                archiveArtifacts artifacts: 'results/*.html' 
             }
         }
         stage('E2e test') {
@@ -43,8 +31,8 @@ pipeline {
                 sh 'docker stop apiserver || true'                
                 sh 'docker rm apiserver || true'                
                 sh 'make test-e2e'                
-                archiveArtifacts artifacts: 'results/html/*', fingerprint: true
-                archiveArtifacts artifacts: 'results/coverage/*', fingerprint: true                
+                archiveArtifacts artifacts: 'results/*.xml'
+                archiveArtifacts artifacts: 'results/*.html' 
             }
         } 
     }
