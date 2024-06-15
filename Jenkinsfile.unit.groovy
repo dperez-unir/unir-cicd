@@ -41,6 +41,15 @@ pipeline {
                 sh 'make test-e2e'                
             }
         } 
+        stage('Archive artifacts') {
+            steps {
+                // Archivar los artefactos en sus respectivas subcarpetas
+                archiveArtifacts artifacts: 'results/html/*', fingerprint: true
+                archiveArtifacts artifacts: 'results/coverage/*', fingerprint: true
+                archiveArtifacts artifacts: 'results/videos/*', fingerprint: true
+                archiveArtifacts artifacts: 'results/screenshots/*', fingerprint: true
+            }
+        }        
     }
     post {
         always {
