@@ -39,11 +39,13 @@ pipeline {
     post {
         always {
             junit 'results/*_result.xml'
-            emailext (
-                subject: "Envío de prueba",
-                body: "lo típico, 'recuerdo de constantinopla'",
-                to: 'david.perez.rod@gmail.com'
-            )
+            script{
+                emailext (
+                    subject: "Envío de prueba",
+                    body: "lo típico, 'recuerdo de constantinopla'",
+                    to: 'david.perez.rod@gmail.com'
+                )
+            }
         }
     }
 }
