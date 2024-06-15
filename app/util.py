@@ -19,3 +19,8 @@ def InvalidConvertToNumber(operand):
 
     except ValueError:
         raise TypeError("Operator cannot be converted to number")
+
+
+def validate_permissions(operation, user):
+    print(f"checking permissions of {user} for operation {operation}")
+    return user == "user1"
