@@ -11,24 +11,29 @@ pipeline {
         }
         stage('Unit tests') {
             steps {
-                sh 'make test-unit'
-                // Asegurar que los directorios necesarios existen
+             sh 'make test-unit'
+                
+                // Crear los directorios necesarios para los artefactos
                 sh '''
                     mkdir -p results/html
                     mkdir -p results/coverage
                     mkdir -p results/videos
                     mkdir -p results/screenshots
                 '''
-
-                // Simulación de creación de archivos para propósitos de demostración
+                
+                // Simular la creación de archivos en esos directorios (esto es solo para demostración)
                 sh '''
                     echo "HTML Report Content" > results/html/report.html
                     echo "Coverage Report Content" > results/coverage/coverage.xml
                     echo "Test Video Content" > results/videos/test_video.mp4
                     echo "Test Screenshot Content" > results/screenshots/test_screenshot.png
                 '''
-                archiveArtifacts artifacts: 'results/*.xml'
-                archiveArtifacts artifacts: 'results/*.html'
+
+                // Archivar los artefactos en sus respectivas subcarpetas
+                archiveArtifacts artifacts: 'results/html/*.html', fingerprint: true
+                archiveArtifacts artifacts: 'results/coverage/*', fingerprint: true
+                archiveArtifacts artifacts: 'results/videos/*', fingerprint: true
+                archiveArtifacts artifacts: 'results/screenshots/*', fingerprint: true
             }
         }
         stage('Api test') {
