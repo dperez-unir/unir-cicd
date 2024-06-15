@@ -35,17 +35,36 @@ test-e2e:
 	docker rm --force calc-web || true
 	docker stop e2e-tests || true
 	docker rm --force e2e-tests || true
+
+	# Iniciar contenedor del servidor API
 	docker run -d --network calc-test-e2e --env PYTHONPATH=/opt/calc --name apiserver --env FLASK_APP=app/api.py -p 5000:5000 -w /opt/calc calculator-app:latest flask run --host=0.0.0.0
+
+	# Iniciar contenedor de la web
 	docker run -d --network calc-test-e2e --name calc-web -p 8001:8001 calc-web
+
+	# Crear contenedor de pruebas end-to-end
 	docker create --network calc-test-e2e --name e2e-tests cypress/included:4.9.0 --browser chrome || true
+
+	# Copiar archivos de configuración y pruebas al contenedor
 	docker cp ./test/e2e/cypress.json e2e-tests:/cypress.json
 	docker cp ./test/e2e/cypress e2e-tests:/cypress
+
+	# Ejecutar las pruebas
 	docker start -a e2e-tests || true
-	docker cp e2e-tests:/results ./ || true
+
+	# Crear los directorios locales si no existen
+	mkdir -p ./videos
+	mkdir -p ./screenshots
+
+	# Copiar videos e imágenes
 	docker cp e2e-tests:/cypress/videos ./videos || true
 	docker cp e2e-tests:/cypress/screenshots ./screenshots || true
-	docker cp e2e-tests:/results/cypress_result.xml ./cypress_result.xml || true
-	docker run --rm --volume `pwd`:/opt/calc --workdir /opt/calc calculator-app:latest junit2html cypress_result.xml cypress_result.html || true
+
+	# Copiar y convertir el archivo de resultados XML a HTML
+	docker cp e2e-tests:/results/ ./results || true
+	docker run --rm --volume `pwd`:/opt/calc --workdir /opt/calc calculator-app:latest junit2html ./results/cypress_result.xml ./results/cypress_result.html || true
+
+	# Limpiar contenedores y red
 	docker rm --force apiserver || true
 	docker rm --force calc-web || true
 	docker rm --force e2e-tests || true
