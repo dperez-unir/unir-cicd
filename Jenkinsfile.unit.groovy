@@ -41,7 +41,7 @@ pipeline {
             junit 'results/*_result.xml'
             script{
                 emailext (
-                    from: 'Jenkins Actividad-3 <jenkins@test.com>'
+                    from: 'Jenkins Actividad-3 <jenkins@test.com>',
                     subject: "Build ${currentBuild.fullDisplayName}",
                     body: """<p>Job ${env.JOB_NAME} build ${env.BUILD_NUMBER}:</p>
                              <p>Check console output at <a href="${env.BUILD_URL}">${env.BUILD_URL}</a> to view the results.</p>""",
