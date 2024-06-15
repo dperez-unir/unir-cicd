@@ -13,7 +13,8 @@ pipeline {
             steps {
                 sh 'make test-unit'
                 archiveArtifacts artifacts: 'results/*.xml'
-                archiveArtifacts artifacts: 'results/*.html'                
+                archiveArtifacts artifacts: 'results/*.html'   
+                archiveArtifacts artifacts: 'results/views/*.html' 
             }
         }
         stage('Api test') {
