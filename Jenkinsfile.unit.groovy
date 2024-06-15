@@ -9,11 +9,6 @@ pipeline {
                 sh 'make build'
             }
         }
-        stage('Install dependencies') {
-            steps {
-                sh 'pip install coverage'
-            }
-        }        
         stage('Unit tests') {
             steps {
                 sh 'make test-unit'
@@ -36,26 +31,13 @@ pipeline {
                 archiveArtifacts artifacts: 'results/*.xml'
             }
         } 
-        stage('Publish Coverage Report') {
-            steps {
-                script {
-                    recordCoverage(
-                        tools: [[parser: 'JACOCO']],
-                        id: 'jacoco', 
-                        name: 'JaCoCo Coverage',
-                        sourceCodeRetention: 'EVERY_BUILD',
-                        qualityGates: [
-                            [threshold: 60.0, metric: 'LINE', baseline: 'PROJECT', unstable: true],
-                            [threshold: 60.0, metric: 'BRANCH', baseline: 'PROJECT', unstable: true]
-                        ]
-                    )
-                }
-            }
-        }        
     }
     post {
         always {
             junit 'results/*_result.xml'
+        }            
+        failure {
+                junit 'results/*_result.xml'            
                 emailext (
                     subject: "Build ${currentBuild.fullDisplayName}",
                     body: """\
@@ -93,5 +75,5 @@ pipeline {
                     to: 'david.perez.rod@gmail.com'
                 )        
         }        
-    }
+    }    
 }
