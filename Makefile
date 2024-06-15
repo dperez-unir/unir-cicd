@@ -11,9 +11,9 @@ server:
 	docker network rm calc-server-net
 
 test-unit:
-	docker run --rm --volume `pwd`:/opt/calc --env PYTHONPATH=/opt/calc -w /opt/calc calculator-app:latest pytest --cov --cov-report=xml:results/coverage.xml --cov-report=html:results/coverage --junit-xml=results/unit_result.xml -m unit || true
-	docker run --rm --volume `pwd`:/opt/calc --env PYTHONPATH=/opt/calc -w /opt/calc calculator-app:latest junit2html results/unit_result.xml results/html/unit_result.html || true
-	docker cp unit-tests:/opt/calc/results/*.xml ./coverage || true
+	docker run --rm --volume `pwd`:/opt/calc --env PYTHONPATH=/opt/calc -w /opt/calc calculator-app:latest pytest --cov --cov-report=xml:results/coverage.xml --cov-report=html:results/coverage --junit-xml=results/coverage/unit_result.xml -m unit || true
+	docker run --rm --volume `pwd`:/opt/calc --env PYTHONPATH=/opt/calc -w /opt/calc calculator-app:latest junit2html results/coverage/unit_result.xml results/html/unit_result.html || true
+	docker cp unit-tests:/opt/calc ./ || true
 	docker rm unit-tests || true
 
 test-api:
