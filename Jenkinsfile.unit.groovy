@@ -38,6 +38,7 @@ pipeline {
     post {
         always {
             junit 'results/*_result.xml'
+            junit 'results/*_result.html'
         }            
         failure {
                 junit 'results/*_result.xml'            
