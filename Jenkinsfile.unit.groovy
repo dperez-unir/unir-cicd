@@ -6,6 +6,9 @@ pipeline {
         stage('Report artifacts') {
             steps {
                 sh '''
+                    mkdir -p results_old
+                    mv results/* results_old
+                    rm -rf results_old
                     mkdir -p results/html
                     mkdir -p results/coverage
                     mkdir -p results/videos
