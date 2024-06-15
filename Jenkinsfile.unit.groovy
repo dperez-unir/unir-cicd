@@ -39,6 +39,11 @@ pipeline {
     post {
         always {
             junit 'results/*_result.xml'
+            emailext (
+                subject: "Build \${currentBuild.fullDisplayName}",
+                body: "Job \${env.JOB_NAME} build \${env.BUILD_NUMBER}:\n\nCheck console output at \${env.BUILD_URL} to view the results.",
+                to: 'david.perez.rod@gmail.com'
+            )
         }
     }
 }
