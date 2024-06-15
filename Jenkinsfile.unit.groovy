@@ -21,8 +21,6 @@ pipeline {
                 sh 'docker rm apiserver || true'    
                 sh 'make test-api'
                 archiveArtifacts artifacts: 'results/*.xml'
-                sh 'docker stop apiserver || true'                
-                sh 'docker rm apiserver || true'
             }
         }
         stage('E2e test') {
@@ -31,8 +29,6 @@ pipeline {
                 sh 'docker rm apiserver || true'                
                 sh 'make test-e2e'                
                 archiveArtifacts artifacts: 'results/*.xml'
-                sh 'docker stop apiserver || true'                
-                sh 'docker rm apiserver || true'                
             }
         } 
     }
