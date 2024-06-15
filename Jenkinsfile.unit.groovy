@@ -31,9 +31,7 @@ pipeline {
                 sh 'docker rm apiserver || true'                
                 sh 'make test-e2e'                
                 archiveArtifacts artifacts: 'results/*.xml'
-                archiveArtifacts artifacts: 'results/*.html' 
-                archiveArtifacts artifacts: 'videos/*' 
-                archiveArtifacts artifacts: 'screenshots/*' 
+                archiveArtifacts artifacts: 'results/*.html'  
             }
         } 
     }
