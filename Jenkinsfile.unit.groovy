@@ -12,9 +12,23 @@ pipeline {
         stage('Unit tests') {
             steps {
                 sh 'make test-unit'
-                sh 'mkdir -p results/html'
+                // Asegurar que los directorios necesarios existen
+                sh '''
+                    mkdir -p results/html
+                    mkdir -p results/coverage
+                    mkdir -p results/videos
+                    mkdir -p results/screenshots
+                '''
+
+                // Simulación de creación de archivos para propósitos de demostración
+                sh '''
+                    echo "HTML Report Content" > results/html/report.html
+                    echo "Coverage Report Content" > results/coverage/coverage.xml
+                    echo "Test Video Content" > results/videos/test_video.mp4
+                    echo "Test Screenshot Content" > results/screenshots/test_screenshot.png
+                '''
                 archiveArtifacts artifacts: 'results/*.xml'
-                archiveArtifacts artifacts: 'results/html/*.html'
+                archiveArtifacts artifacts: 'results/*.html'
             }
         }
         stage('Api test') {
