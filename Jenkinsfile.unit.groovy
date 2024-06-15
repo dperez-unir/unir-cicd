@@ -5,6 +5,7 @@ pipeline {
     stages {
         stage('Build') {
             steps {
+                sh 'ls -R results' // Lista el contenido de la carpeta results                                
                 echo 'Building stage!'
                 sh 'make build'
             }
