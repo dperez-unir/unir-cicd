@@ -1,3 +1,4 @@
+
 .PHONY: all $(MAKECMDGOALS)
 
 build:
@@ -5,11 +6,12 @@ build:
 	docker build -t calc-web ./web
 
 server:
-	docker run --rm --name apiserver --network-alias apiserver --env PYTHONPATH=/opt/calc --env FLASK_APP=app/api.py -p 5000:5000 -w /opt/calc calculator-app:latest flask run --host=0.0.0.0
+	docker network create calc-server-net || true
+	docker run --rm --volume `pwd`:/opt/calc --name apiserver --network calc-server-net --env PYTHONPATH=/opt/calc --env FLASK_APP=app/api.py -p 5000:5000 -w /opt/calc calculator-app:latest flask run --host=0.0.0.0
+	docker network rm calc-server-net
 
 test-unit:
-	docker run --name unit-tests --env PYTHONPATH=/opt/calc -w /opt/calc calculator-app:latest pytest --cov --cov-report=xml:results/coverage.xml --cov-report=html:results/coverage --junit-xml=results/unit_result.xml -m unit || true
-	docker cp unit-tests:/opt/calc/results ./
+	docker run --name unit-tests --env PYTHONPATH=/opt/calc -w /opt/calc calculator-app:latest pytest --cov --cov-report=xml:results/coverage.xml --cov-report=html:results/*.html --junit-xml=results/unit_result.xml -m unit || true	docker cp unit-tests:/opt/calc/results ./
 	docker rm unit-tests || true
 
 test-api:
@@ -32,7 +34,7 @@ test-e2e:
 	docker stop e2e-tests || true
 	docker rm --force e2e-tests || true
 	docker run -d --network calc-test-e2e --env PYTHONPATH=/opt/calc --name apiserver --env FLASK_APP=app/api.py -p 5000:5000 -w /opt/calc calculator-app:latest flask run --host=0.0.0.0
-	docker run -d --network calc-test-e2e --name calc-web -p 80:80 calc-web
+	docker run -d --network calc-test-e2e --name calc-web -p 8001:8001 calc-web
 	docker create --network calc-test-e2e --name e2e-tests cypress/included:4.9.0 --browser chrome || true
 	docker cp ./test/e2e/cypress.json e2e-tests:/cypress.json
 	docker cp ./test/e2e/cypress e2e-tests:/cypress
