@@ -20,7 +20,7 @@ test-api:
 	docker network create calc-test-api || true
 	docker run -d --network calc-test-api --env PYTHONPATH=/opt/calc --name apiserver --env FLASK_APP=app/api.py -p 5000:5000 -w /opt/calc calculator-app:latest flask run --host=0.0.0.0
 	sleep 5
-	docker run --rm --network calc-test-api --volume `pwd`:/opt/calc --env PYTHONPATH=/opt/calc --env BASE_URL=http://apiserver:5000/ -w /opt/calc calculator-app:latest sh -c "pytest --junit-xml=results/api_result.xml -m api || true; junit2html results/api_result.xml results/api_result.html; cp -r results /opt/calc/" || true
+	docker run --rm --network calc-test-api --volume `pwd`:/opt/calc --env PYTHONPATH=/opt/calc --env BASE_URL=http://apiserver:5000/ -w /opt/calc calculator-app:latest sh -c "pytest --junit-xml=results/coverage/api_result.xml -m api || true; junit2html results/coverage/api_result.xml results/html/api_result.html; cp -r results /opt/calc/" || true
 	docker stop apiserver || true
 	docker rm --force apiserver || true
 	docker stop api-tests || true
@@ -57,12 +57,12 @@ test-e2e:
 	mkdir -p ./screenshots
 
 	# Copiar videos e imágenes
-	docker cp e2e-tests:/cypress/videos ./videos || true
-	docker cp e2e-tests:/cypress/screenshots ./screenshots || true
+	docker cp e2e-tests:/cypress/videos .results/videos || true
+	docker cp e2e-tests:/cypress/screenshots .results/screenshots || true
 
 	# Copiar y convertir el archivo de resultados XML a HTML
-	docker cp e2e-tests:/results/ ./results || true
-	docker run --rm --volume `pwd`:/opt/calc --workdir /opt/calc calculator-app:latest junit2html ./results/cypress_result.xml ./results/cypress_result.html || true
+	docker cp e2e-tests:/results/cypress_result.xml ./results/coverage || true
+	docker run --rm --volume `pwd`:/opt/calc --workdir /opt/calc calculator-app:latest junit2html ./results/coverage/cypress_result.xml ./results/html/cypress_result.html || true
 
 	# Limpiar contenedores y red
 	docker rm --force apiserver || true
