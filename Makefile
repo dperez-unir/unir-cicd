@@ -52,14 +52,6 @@ test-e2e:
 	# Ejecutar las pruebas
 	docker start -a e2e-tests || true
 
-	# Crear los directorios locales si no existen
-	mkdir -p ./videos
-	mkdir -p ./screenshots
-
-	# Copiar videos e imágenes
-	docker cp e2e-tests:/cypress/videos ./videos || true
-	docker cp e2e-tests:/cypress/screenshots ./screenshots || true
-
 	# Copiar y convertir el archivo de resultados XML a HTML
 	docker cp e2e-tests:/results/ ./results || true
 	docker run --rm --volume `pwd`:/opt/calc --workdir /opt/calc calculator-app:latest junit2html ./results/cypress_result.xml ./results/cypress_result.html || true
