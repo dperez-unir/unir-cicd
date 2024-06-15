@@ -61,7 +61,7 @@ test-e2e:
 	docker cp e2e-tests:/cypress/screenshots ./screenshots || true
 
 	# Copiar y convertir el archivo de resultados XML a HTML
-	docker cp e2e-tests:/results/* ./results || true
+	docker cp e2e-tests:/results/* ./ || true
 	docker run --rm --volume `pwd`:/opt/calc --workdir /opt/calc calculator-app:latest junit2html ./results/cypress_result.xml ./results/cypress_result.html || true
 
 	# Limpiar contenedores y red
