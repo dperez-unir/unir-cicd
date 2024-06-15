@@ -9,6 +9,11 @@ pipeline {
                 sh 'make build'
             }
         }
+        stage('Install dependencies') {
+            steps {
+                sh 'pip install -r requirements.txt'
+            }
+        }        
         stage('Unit tests') {
             steps {
                 sh 'make test-unit'
