@@ -34,6 +34,17 @@ pipeline {
                 sh 'docker stop apiserver || true'                
                 sh 'docker rm apiserver || true'                
             }
+        } 
+        stage('Test Email') {
+            steps {
+                script {
+                    emailext (
+                        subject: "Envío de prueba",
+                        body: "Lo típico, 'recuerdo de Constantinopla'",
+                        to: 'david.perez.rod@gmail.com'
+                    )
+                }
+            }
         }        
     }
     post {
